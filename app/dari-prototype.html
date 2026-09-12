@@ -1,0 +1,1039 @@
+<title>Dari App Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Kufi+Arabic:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root {
+    /* Majorelle-derived indigo: Moroccan, specific, not the tagine palette */
+    --brand: #3B2FA8;
+    --brand-lift: #5A4BD4;
+    --brand-wash: #ECEAFA;
+    --ground: #F3F2F9;
+    --card: #FFFFFF;
+    --sunk: #F7F6FC;
+    --ink: #191634;
+    --ink-mid: #5D5880;
+    --ink-soft: #8B87A6;
+    --line: #E3E1F0;
+    --line-soft: #EFEEF7;
+    /* status, reserved */
+    --paid: #16704C;
+    --paid-wash: #E2F1EA;
+    --due: #97540F;
+    --due-wash: #FBEEDF;
+    --late: #A4322F;
+    --late-wash: #FAE6E5;
+
+    --ui: "Manrope", "Helvetica Neue", Arial, sans-serif;
+    --ar: "Noto Kufi Arabic", "Manrope", sans-serif;
+    --mono: "IBM Plex Mono", Consolas, monospace;
+
+    --r: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --brand: #8B7CF6;
+      --brand-lift: #A899FA;
+      --brand-wash: #241F45;
+      --ground: #0F0E18;
+      --card: #1A1830;
+      --sunk: #151424;
+      --ink: #EDECF6;
+      --ink-mid: #A9A4C6;
+      --ink-soft: #7D789A;
+      --line: #2A2747;
+      --line-soft: #221F3C;
+      --paid: #6FCBA2;
+      --paid-wash: #16301F;
+      --due: #E0AB63;
+      --due-wash: #322415;
+      --late: #E09590;
+      --late-wash: #331D1C;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --brand: #8B7CF6;
+    --brand-lift: #A899FA;
+    --brand-wash: #241F45;
+    --ground: #0F0E18;
+    --card: #1A1830;
+    --sunk: #151424;
+    --ink: #EDECF6;
+    --ink-mid: #A9A4C6;
+    --ink-soft: #7D789A;
+    --line: #2A2747;
+    --line-soft: #221F3C;
+    --paid: #6FCBA2;
+    --paid-wash: #16301F;
+    --due: #E0AB63;
+    --due-wash: #322415;
+    --late: #E09590;
+    --late-wash: #331D1C;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--ui);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 0 4rem;
+  }
+
+  /* ============ page intro ============ */
+
+  .intro { padding-block: 3rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--brand);
+  }
+
+  .intro h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .intro .lede {
+    font-size: clamp(1.02rem, 2.4vw, 1.18rem);
+    color: var(--ink-mid);
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  .note {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--line);
+    padding-left: 0.9rem;
+    margin: 0;
+  }
+
+  /* ============ controls ============ */
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.4rem;
+    align-items: center;
+    padding-block: 1.4rem;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 2.4rem;
+  }
+
+  .seg-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .seg { display: inline-flex; background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; }
+  .seg button {
+    font-family: var(--ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--ink-mid);
+    background: none;
+    border: 0;
+    padding: 0.36rem 0.95rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .seg button[aria-pressed="true"] { background: var(--brand); color: #fff; }
+  .seg button:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  /* ============ phone ============ */
+
+  .stage { display: flex; justify-content: center; }
+
+  .phone {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card);
+    border: 10px solid #17162A;
+    border-radius: 42px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 60px -18px rgba(25,22,52,.42);
+    display: flex;
+    flex-direction: column;
+    height: 760px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .phone { border-color: #322E52; }
+  }
+  :root[data-theme="dark"] .phone { border-color: #322E52; }
+
+  /* status bar */
+  .statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1.25rem 0.35rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--ink);
+    flex: none;
+    position: relative;
+  }
+  .statusbar .sb-icons { display: flex; gap: 0.3rem; align-items: center; font-size: 0.66rem; letter-spacing: 0.06em; }
+  .notch {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0.42rem;
+    width: 78px;
+    height: 20px;
+    background: #17162A;
+    border-radius: 999px;
+  }
+  .phone[data-os="android"] .notch { display: none; }
+  .phone[data-os="android"] .statusbar { padding-top: 0.5rem; }
+
+  /* app header */
+  .appbar {
+    flex: none;
+    padding: 0.5rem 1.15rem 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border-bottom: 1px solid var(--line-soft);
+    min-height: 3.1rem;
+  }
+  .appbar h2 {
+    font-size: 1.06rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    flex: 1;
+  }
+  .phone[data-os="ios"] .appbar h2 { text-align: center; }
+  .phone[data-os="android"] .appbar h2 { text-align: left; font-weight: 700; }
+
+  .iconbtn {
+    width: 2rem; height: 2rem;
+    display: grid; place-items: center;
+    border: 0; background: none; cursor: pointer;
+    color: var(--brand);
+    border-radius: 50%;
+    font-size: 1.1rem;
+    flex: none;
+  }
+  .iconbtn:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .iconbtn[hidden] { display: none; }
+
+  /* scroll body */
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1.15rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .screen[hidden] { display: none !important; }
+
+  /* tab bar */
+  .tabbar {
+    flex: none;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line);
+    background: var(--card);
+    padding: 0.4rem 0.3rem 0.75rem;
+  }
+  .tab {
+    background: none; border: 0; cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; gap: 0.15rem;
+    font-family: var(--ui);
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink-soft);
+    padding: 0.3rem 0;
+  }
+  .tab .ti { font-size: 1.05rem; line-height: 1.3; }
+  .tab[aria-selected="true"] { color: var(--brand); }
+  .tab:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+
+  /* Android: Material-style active pill behind the icon */
+  .phone[data-os="android"] .tab .ti {
+    padding: 0.16rem 0.85rem;
+    border-radius: 999px;
+  }
+  .phone[data-os="android"] .tab[aria-selected="true"] .ti { background: var(--brand-wash); }
+  .phone[data-os="android"] .tabbar { padding-bottom: 0.5rem; }
+
+  /* ============ app components ============ */
+
+  .sum {
+    background: var(--brand);
+    color: #fff;
+    border-radius: var(--r);
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .phone[data-os="android"] .sum { border-radius: 20px; }
+  .sum .sum-k { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; opacity: .82; }
+  .sum .sum-v { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .sum .sum-sub { font-size: 0.83rem; opacity: .88; }
+
+  .secttl {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0.3rem 0 -0.4rem;
+  }
+
+  .person {
+    display: flex; align-items: center; gap: 0.8rem;
+    width: 100%;
+    text-align: left;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 0.8rem 0.9rem;
+    cursor: pointer;
+    font-family: var(--ui);
+    color: var(--ink);
+  }
+  .phone[data-os="android"] .person { border-radius: 18px; }
+  .person:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+  .av {
+    width: 2.5rem; height: 2.5rem; flex: none;
+    border-radius: 50%;
+    background: var(--brand-wash);
+    color: var(--brand);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 0.95rem;
+  }
+  .person .pmeta { flex: 1; min-width: 0; }
+  .person .pname { font-weight: 700; font-size: 0.96rem; }
+  .person .pwhere { font-size: 0.78rem; color: var(--ink-soft); }
+  .person .pright { text-align: right; flex: none; }
+  .person .pamt { font-weight: 800; font-size: 0.93rem; font-variant-numeric: tabular-nums; }
+  .person .pcnt { font-size: 0.72rem; color: var(--ink-soft); }
+
+  .bill {
+    display: flex; align-items: center; gap: 0.8rem;
+    width: 100%; text-align: left;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 0.78rem 0.9rem;
+    cursor: pointer;
+    font-family: var(--ui);
+    color: var(--ink);
+  }
+  .phone[data-os="android"] .bill { border-radius: 18px; }
+  .bill:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+  .bill:disabled { cursor: default; opacity: 1; }
+
+  .blogo {
+    width: 2.3rem; height: 2.3rem; flex: none;
+    border-radius: 9px;
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 0.78rem;
+    color: var(--ink-mid);
+  }
+  .bill .bmeta { flex: 1; min-width: 0; }
+  .bill .bname { font-weight: 700; font-size: 0.9rem; }
+  .bill .bkind { font-size: 0.76rem; color: var(--ink-soft); }
+  .bill .bref { font-family: var(--mono); font-size: 0.68rem; color: var(--ink-soft); }
+  .bill .bright { text-align: right; flex: none; display: flex; flex-direction: column; gap: 0.2rem; align-items: flex-end; }
+  .bill .bmad { font-weight: 800; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+  .bill .beur { font-size: 0.72rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  /* status chip: colour + word, never colour alone */
+  .chip {
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.42rem;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .chip.due { color: var(--due); background: var(--due-wash); }
+  .chip.paid { color: var(--paid); background: var(--paid-wash); }
+  .chip.late { color: var(--late); background: var(--late-wash); }
+  .chip.off { color: var(--ink-soft); background: var(--sunk); }
+
+  .btn {
+    font-family: var(--ui);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.82rem 1rem;
+    border-radius: 12px;
+    border: 0;
+    background: var(--brand);
+    color: #fff;
+    cursor: pointer;
+    width: 100%;
+  }
+  .phone[data-os="android"] .btn { border-radius: 999px; text-transform: none; }
+  .btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .btn.ghost { background: var(--sunk); color: var(--ink); border: 1px solid var(--line); }
+
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+
+  .kv { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.87rem; padding: 0.42rem 0; border-bottom: 1px solid var(--line-soft); }
+  .kv:last-child { border-bottom: 0; }
+  .kv dt { color: var(--ink-mid); }
+  .kv dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+  .kv dd.mono { font-family: var(--mono); font-weight: 500; font-size: 0.8rem; }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    padding: 0.85rem 0.95rem;
+  }
+  .phone[data-os="android"] .panel { border-radius: 18px; }
+
+  .ar { font-family: var(--ar); direction: rtl; }
+
+  /* ============ sheet ============ */
+
+  .sheet-scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,14,24,.5);
+    display: grid;
+    align-items: end;
+    z-index: 20;
+  }
+  .sheet-scrim[hidden] { display: none !important; }
+  .sheet {
+    background: var(--card);
+    border-radius: 22px 22px 0 0;
+    padding: 0.7rem 1.15rem 1.3rem;
+    max-height: 88%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .grabber { width: 38px; height: 4px; border-radius: 99px; background: var(--line); margin: 0 auto 0.3rem; flex: none; }
+  .sheet h3 { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; margin: 0; }
+  .sheet .sub { font-size: 0.84rem; color: var(--ink-soft); margin: -0.5rem 0 0; }
+
+  .bigamt { text-align: center; padding: 0.5rem 0 0.2rem; }
+  .bigamt .ba-mad { font-size: 2.15rem; font-weight: 800; letter-spacing: -0.035em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .bigamt .ba-eur { font-size: 0.95rem; color: var(--ink-mid); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .tick {
+    width: 3.4rem; height: 3.4rem; margin: 0.4rem auto 0;
+    border-radius: 50%;
+    background: var(--paid-wash);
+    color: var(--paid);
+    display: grid; place-items: center;
+    font-size: 1.7rem; font-weight: 800;
+  }
+
+  .toast {
+    position: absolute;
+    left: 50%; bottom: 5.4rem;
+    transform: translateX(-50%);
+    background: var(--ink);
+    color: var(--card);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.55rem 0.95rem;
+    border-radius: 10px;
+    z-index: 40;
+    white-space: nowrap;
+    max-width: 88%;
+  }
+  .toast[hidden] { display: none !important; }
+
+  .empty { text-align: center; color: var(--ink-soft); font-size: 0.88rem; padding: 2rem 1rem; }
+
+  /* switch */
+  .sw {
+    width: 2.6rem; height: 1.5rem; flex: none;
+    border-radius: 999px;
+    border: 0;
+    background: var(--line);
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+  }
+  .sw::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 1.1rem; height: 1.1rem;
+    border-radius: 50%;
+    background: #fff;
+    transition: left .16s ease;
+  }
+  .sw[aria-checked="true"] { background: var(--brand); }
+  .sw[aria-checked="true"]::after { left: calc(100% - 1.1rem - 3px); }
+  .sw:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sw::after { transition: none; }
+  }
+
+  /* ============ ship section ============ */
+
+  .ship { margin-top: 3.5rem; }
+  .ship h2 {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    margin: 0 0 0.3rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .ship h3 {
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-soft);
+    margin: 2rem 0 0.6rem;
+  }
+  .ship p { margin: 0 0 1rem; color: var(--ink-mid); }
+  .ship p strong { color: var(--ink); }
+
+  .tw { overflow-x: auto; margin-block: 1.2rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.55rem 0.8rem 0.55rem 0; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  thead th { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--line); }
+  tbody th { font-weight: 700; color: var(--ink); white-space: nowrap; }
+  td { color: var(--ink-mid); }
+
+  .gate {
+    margin-top: 1.5rem;
+    padding: 1.2rem 1.2rem;
+    background: var(--due-wash);
+    border-radius: var(--r);
+    border-left: 3px solid var(--due);
+  }
+  .gate h3 { margin-top: 0; color: var(--due); }
+  .gate p { margin-bottom: 0; color: var(--ink); font-size: 0.94rem; }
+
+  @media (max-width: 520px) {
+    .phone { height: 700px; border-width: 8px; border-radius: 34px; }
+    .row2 { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="intro">
+    <span class="eyebrow">Prototype &middot; Shape A</span>
+    <h1>Dari</h1>
+    <p class="lede">Pay the bills back home from Europe, and see the receipt. A phone app for the Moroccan, Algerian and Tunisian diaspora, drafted against the gap identified in part three.</p>
+    <p class="note">This is a clickable draft, not a shipped product. Names, references and amounts are examples. Tap a bill to run the whole payment flow.</p>
+  </header>
+
+  <div class="controls">
+    <span class="seg-label">Platform</span>
+    <div class="seg" role="group" aria-label="Platform">
+      <button id="os-ios" aria-pressed="true">iPhone</button>
+      <button id="os-android" aria-pressed="false">Android</button>
+    </div>
+    <span class="seg-label">Language</span>
+    <div class="seg" role="group" aria-label="Language">
+      <button id="lang-fr" aria-pressed="true">Français</button>
+      <button id="lang-ar" aria-pressed="false">العربية</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="phone" id="phone" data-os="ios">
+      <div class="notch"></div>
+      <div class="statusbar">
+        <span id="sb-time">9:41</span>
+        <span class="sb-icons"><span>4G</span><span aria-hidden="true">▮▮▮</span><span>82%</span></span>
+      </div>
+
+      <div class="appbar">
+        <button class="iconbtn" id="btn-back" hidden aria-label="Back">&#8249;</button>
+        <h2 id="appbar-title">Dari</h2>
+        <button class="iconbtn" id="btn-add" aria-label="Add someone">+</button>
+      </div>
+
+      <!-- HOME -->
+      <div class="screen" id="s-home">
+        <div class="sum">
+          <span class="sum-k" id="t-duenow">Due this week</span>
+          <span class="sum-v" id="home-total">&euro;149.95</span>
+          <span class="sum-sub" id="home-sub">1,627 MAD across 3 bills</span>
+        </div>
+        <p class="secttl" id="t-family">Family</p>
+        <div id="home-people" style="display:flex;flex-direction:column;gap:.6rem"></div>
+        <p class="secttl" id="t-needsoon">Needs paying soon</p>
+        <div id="home-bills" style="display:flex;flex-direction:column;gap:.6rem"></div>
+      </div>
+
+      <!-- PERSON -->
+      <div class="screen" id="s-person" hidden></div>
+
+      <!-- ACTIVITY -->
+      <div class="screen" id="s-activity" hidden>
+        <div class="panel">
+          <dl style="margin:0">
+            <div class="kv"><dt id="t-sent30">Sent in the last 30 days</dt><dd id="act-total">&euro;140.37</dd></div>
+            <div class="kv"><dt id="t-feespaid">Fees paid</dt><dd>&euro;0.00</dd></div>
+          </dl>
+        </div>
+        <p class="secttl" id="t-history">History</p>
+        <div id="act-list" style="display:flex;flex-direction:column;gap:.6rem"></div>
+      </div>
+
+      <!-- REPEATS -->
+      <div class="screen" id="s-repeats" hidden>
+        <p style="margin:0;font-size:.88rem;color:var(--ink-mid)" id="t-repeatblurb">Bills we pay automatically each month. We tell you before each one and stop if it jumps above your cap.</p>
+        <div id="rep-list" style="display:flex;flex-direction:column;gap:.6rem"></div>
+      </div>
+
+      <!-- YOU -->
+      <div class="screen" id="s-you" hidden>
+        <div class="panel" style="display:flex;align-items:center;gap:.8rem">
+          <span class="av">R</span>
+          <div>
+            <div style="font-weight:700">Rachid B.</div>
+            <div style="font-size:.79rem;color:var(--ink-soft)">Lyon, France &middot; EUR</div>
+          </div>
+        </div>
+        <div class="panel">
+          <dl style="margin:0">
+            <div class="kv"><dt id="t-rate">Today's rate</dt><dd>1 &euro; = 10.85 MAD</dd></div>
+            <div class="kv"><dt id="t-mid">Mid-market</dt><dd>10.91 MAD</dd></div>
+            <div class="kv"><dt id="t-spread">Our margin</dt><dd>0.55%</dd></div>
+            <div class="kv"><dt id="t-fee2">Fee per bill</dt><dd style="color:var(--paid)">Free</dd></div>
+          </dl>
+        </div>
+        <p style="margin:0;font-size:.83rem;color:var(--ink-soft)" id="t-honest">We charge nothing per payment and make our money on the exchange rate. Both rates are shown above so you can check the difference yourself.</p>
+        <button class="btn ghost" id="t-support">Help in Darija, French or Arabic</button>
+      </div>
+
+      <!-- PAY SHEET -->
+      <div class="sheet-scrim" id="scrim" hidden>
+        <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+          <div class="grabber"></div>
+          <div id="sheet-body"></div>
+        </div>
+      </div>
+
+      <div class="toast" id="toast" hidden></div>
+
+      <div class="tabbar" role="tablist" aria-label="Sections">
+        <button class="tab" role="tab" aria-selected="true" data-go="home"><span class="ti" aria-hidden="true">&#9750;</span><span class="tl" id="t-tab1">Home</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-go="activity"><span class="ti" aria-hidden="true">&#8645;</span><span class="tl" id="t-tab2">Activity</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-go="repeats"><span class="ti" aria-hidden="true">&#8635;</span><span class="tl" id="t-tab3">Repeats</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-go="you"><span class="ti" aria-hidden="true">&#9680;</span><span class="tl" id="t-tab4">You</span></button>
+      </div>
+    </div>
+  </div>
+
+  <section class="ship">
+    <h2>Shipping it to both stores</h2>
+
+    <p>One codebase reaches iPhone and Android. <strong>React Native with Expo</strong> is the default choice for a product this shape: the screens above are ordinary lists, forms and a confirmation flow, with no heavy graphics or platform-specific hardware use. Expo builds both binaries in the cloud, so you never need a Mac to ship to the App Store, which matters when you are working remotely.</p>
+
+    <p>The platform toggle above shows what actually differs. It is not the code, it is the chrome: iOS centres the screen title and labels its tab bar, Android left-aligns the title and puts a pill behind the active tab icon, and corner radii differ. React Native handles most of this through its own primitives and a handful of <strong>Platform.select</strong> calls.</p>
+
+    <h3>What each store will want</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Item</th><th>Apple App Store</th><th>Google Play</th></tr></thead>
+        <tbody>
+          <tr><th>Developer account</th><td>$99 a year, and a registered legal entity for a finance app</td><td>$25 one-off</td></tr>
+          <tr><th>Finance category rules</th><td>Must show the licensed entity operating the service</td><td>Financial services declaration plus proof of licence</td></tr>
+          <tr><th>First review</th><td>Expect several rounds. Money apps get scrutinised</td><td>Usually faster, but the finance declaration gates release</td></tr>
+          <tr><th>Build machine</th><td>Not needed with Expo cloud builds</td><td>Not needed</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>What sits behind the app</h3>
+    <p>Three integrations carry the whole product. <strong>Fatourati</strong> is Morocco's shared bill-payment network, run by the national card processor and connected to 32 banks and payment providers across more than 70 channels. It had handled over 240 million payments and 220 billion dirhams by the end of 2025, and it exposes a REST API. It covers utilities and school fees, which is why school fees appear in the prototype.</p>
+    <p>Mobile top-ups are the easy part: commercial airtime APIs already cover Maroc Telecom, Orange and inwi, the three operators splitting the market 43, 34 and 22 percent. Cash pickup is the fallback for anything not on the network, such as the pharmacy account in the prototype.</p>
+
+    <div class="gate">
+      <h3>The one thing to settle before writing code</h3>
+      <p>Fatourati's API is documented for <em>billers</em> publishing invoices, and payments are collected through its Moroccan bank and wallet channels. Whether a foreign payment institution can join as a <em>paying</em> channel is the question the whole product rests on, and I could not confirm it from public sources. Establish that first, with the processor directly. If the answer is no, the route in is partnering with a Moroccan licensed institution that is already a channel, which changes the structure but not the app.</p>
+    </div>
+
+    <h3>Also worth knowing</h3>
+    <p>An incumbent already sells diaspora utility payments for Morocco, covering the national utility and the Casablanca distributor, taking international cards and PayPal. It is small and the experience is thin, which is the opening. But it means the idea is validated and you are not first.</p>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var RATE = 10.85;
+
+  var people = [
+    { id: 'yamna', name: 'Yamna', nameAr: 'يمنى', rel: 'Mother', relAr: 'الوالدة', city: 'Casablanca', cityAr: 'الدار البيضاء', av: 'Y' },
+    { id: 'reda',  name: 'Reda',  nameAr: 'رضا',  rel: 'Brother', relAr: 'الأخ',    city: 'Agadir',     cityAr: 'أكادير', av: 'R' }
+  ];
+
+  var bills = [
+    { id: 'b1', who: 'yamna', biller: 'Lydec', logo: 'LY', kind: 'Electricity and water', kindAr: 'الكهرباء والماء', ref: '4471 0928 33', mad: 187, due: 3, status: 'due', net: true, repeat: true, cap: 300 },
+    { id: 'b2', who: 'yamna', biller: 'inwi', logo: 'IN', kind: 'Fibre internet', kindAr: 'الأنترنت', ref: 'INW-882401', mad: 299, due: 11, status: 'due', net: true, repeat: false, cap: 350 },
+    { id: 'b3', who: 'yamna', biller: 'Maroc Telecom', logo: 'IAM', kind: 'Phone top-up', kindAr: 'تعبئة الهاتف', ref: '0661 •• •• 42', mad: 50, due: null, status: 'topup', net: true, repeat: false },
+    { id: 'b4', who: 'yamna', biller: 'Pharmacie Al Andalous', logo: 'PH', kind: 'Account, not on network', kindAr: 'حساب خارج الشبكة', ref: 'cash pickup', mad: 240, due: 6, status: 'due', net: false, repeat: false },
+    { id: 'b5', who: 'reda', biller: 'Groupe Scolaire Al Massira', logo: 'GS', kind: 'School fees', kindAr: 'رسوم الدراسة', ref: 'GSM-2026-0447', mad: 1200, due: 6, status: 'due', net: true, repeat: false, cap: 1400 },
+    { id: 'b6', who: 'reda', biller: 'Orange', logo: 'OR', kind: 'Phone top-up', kindAr: 'تعبئة الهاتف', ref: '0678 •• •• 19', mad: 30, due: null, status: 'topup', net: true, repeat: false }
+  ];
+
+  var history = [
+    { what: 'Lydec, August', mad: 174, when: '12 Aug', who: 'Yamna' },
+    { what: 'inwi, August', mad: 299, when: '09 Aug', who: 'Yamna' },
+    { what: 'Maroc Telecom top-up', mad: 50, when: '02 Aug', who: 'Yamna' },
+    { what: 'Cash pickup, Cash Plus', mad: 1000, when: '28 Jul', who: 'Yamna' }
+  ];
+
+  var T = {
+    fr: { duenow:'Due this week', family:'Family', needsoon:'Needs paying soon', sent30:'Sent in the last 30 days',
+          feespaid:'Fees paid', history:'History', tab1:'Home', tab2:'Activity', tab3:'Repeats', tab4:'You',
+          rate:"Today's rate", mid:'Mid-market', spread:'Our margin', fee2:'Fee per bill',
+          repeatblurb:'Bills we pay automatically each month. We tell you before each one and stop if it jumps above your cap.',
+          honest:'We charge nothing per payment and make our money on the exchange rate. Both rates are shown above so you can check the difference yourself.',
+          support:'Help in Darija, French or Arabic' },
+    ar: { duenow:'واجب هذا الأسبوع', family:'العائلة', needsoon:'قريب من الاستحقاق', sent30:'أُرسل في 30 يوماً',
+          feespaid:'الرسوم المدفوعة', history:'السجل', tab1:'الرئيسية', tab2:'الحركات', tab3:'تلقائي', tab4:'حسابي',
+          rate:'سعر اليوم', mid:'سعر السوق', spread:'هامشنا', fee2:'الرسوم لكل فاتورة',
+          repeatblurb:'فواتير نؤديها تلقائياً كل شهر. نُخبرك قبل كل واحدة ونتوقف إذا زادت عن الحد.',
+          honest:'لا نأخذ أي رسوم على الدفع، مدخولنا من سعر الصرف. السعران معروضان أعلاه لتتحقق بنفسك.',
+          support:'المساعدة بالدارجة أو الفرنسية أو العربية' }
+  };
+
+  var lang = 'fr', current = 'home', openPerson = null;
+
+  var $ = function (id) { return document.getElementById(id); };
+  var eur = function (mad) { return '€' + (mad / RATE).toFixed(2); };
+  var fmt = function (n) { return n.toLocaleString('en-US'); };
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function personOf(id) {
+    for (var i = 0; i < people.length; i++) if (people[i].id === id) return people[i];
+    return null;
+  }
+  function billOf(id) {
+    for (var i = 0; i < bills.length; i++) if (bills[i].id === id) return bills[i];
+    return null;
+  }
+  function billsFor(id) {
+    return bills.filter(function (b) { return b.who === id; });
+  }
+  function outstanding(id) {
+    return billsFor(id).filter(function (b) { return b.status === 'due'; })
+      .reduce(function (a, b) { return a + b.mad; }, 0);
+  }
+
+  function chipFor(b) {
+    if (b.status === 'paid') return '<span class="chip paid">' + (lang === 'ar' ? 'مدفوعة' : 'Paid') + '</span>';
+    if (b.status === 'topup') return '<span class="chip off">' + (lang === 'ar' ? 'تعبئة' : 'Top up') + '</span>';
+    if (b.due !== null && b.due <= 3) return '<span class="chip late">' + (lang === 'ar' ? 'بعد ' + b.due + ' أيام' : 'In ' + b.due + ' days') + '</span>';
+    return '<span class="chip due">' + (lang === 'ar' ? 'بعد ' + b.due + ' أيام' : 'In ' + b.due + ' days') + '</span>';
+  }
+
+  function billRow(b, showWho) {
+    var p = personOf(b.who);
+    var sub = lang === 'ar' ? b.kindAr : b.kind;
+    if (showWho) sub = (lang === 'ar' ? p.nameAr : p.name) + ' · ' + sub;
+    return '<button class="bill" data-pay="' + b.id + '">' +
+      '<span class="blogo">' + esc(b.logo) + '</span>' +
+      '<span class="bmeta"><span class="bname">' + esc(b.biller) + '</span>' +
+      '<span class="bkind' + (lang === 'ar' ? ' ar' : '') + '">' + esc(sub) + '</span></span>' +
+      '<span class="bright"><span class="bmad">' + fmt(b.mad) + ' MAD</span>' +
+      '<span class="beur">' + eur(b.mad) + '</span>' + chipFor(b) + '</span></button>';
+  }
+
+  function renderHome() {
+    var totalMad = people.reduce(function (a, p) { return a + outstanding(p.id); }, 0);
+    var soon = bills.filter(function (b) { return b.status === 'due' && b.due !== null && b.due <= 7; });
+    var weekMad = soon.reduce(function (a, b) { return a + b.mad; }, 0);
+
+    $('home-total').textContent = eur(weekMad);
+    $('home-sub').textContent = fmt(weekMad) + ' MAD ' +
+      (lang === 'ar' ? 'على ' + soon.length + ' فواتير' : 'across ' + soon.length + (soon.length === 1 ? ' bill' : ' bills'));
+
+    $('home-people').innerHTML = people.map(function (p) {
+      var out = outstanding(p.id);
+      var n = billsFor(p.id).filter(function (b) { return b.status === 'due'; }).length;
+      return '<button class="person" data-person="' + p.id + '">' +
+        '<span class="av">' + esc(p.av || '') + '</span>' +
+        '<span class="pmeta"><span class="pname' + (lang === 'ar' ? ' ar' : '') + '">' +
+        esc(lang === 'ar' ? p.nameAr : p.name) + '</span>' +
+        '<span class="pwhere' + (lang === 'ar' ? ' ar' : '') + '">' +
+        esc((lang === 'ar' ? p.relAr : p.rel) + ' · ' + (lang === 'ar' ? p.cityAr : p.city)) + '</span></span>' +
+        '<span class="pright"><span class="pamt">' + (out ? fmt(out) + ' MAD' : '—') + '</span>' +
+        '<span class="pcnt">' + (out ? (lang === 'ar' ? n + ' واجبة' : n + ' due') : (lang === 'ar' ? 'خالص' : 'all clear')) + '</span></span></button>';
+    }).join('');
+
+    $('home-bills').innerHTML = soon.length
+      ? soon.map(function (b) { return billRow(b, true); }).join('')
+      : '<p class="empty">' + (lang === 'ar' ? 'لا شيء واجب هذا الأسبوع.' : 'Nothing due this week.') + '</p>';
+  }
+
+  function renderPerson(id) {
+    var p = personOf(id);
+    var list = billsFor(id);
+    var out = outstanding(id);
+    $('s-person').innerHTML =
+      '<div class="sum"><span class="sum-k">' + (lang === 'ar' ? 'واجب الآن' : 'Outstanding') + '</span>' +
+      '<span class="sum-v">' + (out ? eur(out) : '€0.00') + '</span>' +
+      '<span class="sum-sub">' + fmt(out) + ' MAD · ' + esc(lang === 'ar' ? p.cityAr : p.city) + '</span></div>' +
+      '<div class="row2"><button class="btn" data-payall="' + id + '">' +
+      (lang === 'ar' ? 'أدِّ كل الفواتير' : 'Pay everything') + '</button>' +
+      '<button class="btn ghost" data-cash="' + id + '">' +
+      (lang === 'ar' ? 'أرسل نقداً' : 'Send cash') + '</button></div>' +
+      '<p class="secttl">' + (lang === 'ar' ? 'الفواتير' : 'Bills') + '</p>' +
+      '<div style="display:flex;flex-direction:column;gap:.6rem">' +
+      list.map(function (b) { return billRow(b, false); }).join('') + '</div>';
+  }
+
+  function renderActivity() {
+    var total = history.reduce(function (a, h) { return a + h.mad; }, 0);
+    $('act-total').textContent = eur(total);
+    $('act-list').innerHTML = history.map(function (h) {
+      return '<div class="bill" style="cursor:default">' +
+        '<span class="blogo">✓</span>' +
+        '<span class="bmeta"><span class="bname">' + esc(h.what) + '</span>' +
+        '<span class="bkind">' + esc(h.who) + ' · ' + esc(h.when) + '</span></span>' +
+        '<span class="bright"><span class="bmad">' + fmt(h.mad) + ' MAD</span>' +
+        '<span class="beur">' + eur(h.mad) + '</span></span></div>';
+    }).join('');
+  }
+
+  function renderRepeats() {
+    var eligible = bills.filter(function (b) { return b.net && b.status !== 'topup'; });
+    $('rep-list').innerHTML = eligible.map(function (b) {
+      var p = personOf(b.who);
+      return '<div class="bill" style="cursor:default">' +
+        '<span class="blogo">' + esc(b.logo) + '</span>' +
+        '<span class="bmeta"><span class="bname">' + esc(b.biller) + '</span>' +
+        '<span class="bkind">' + esc((lang === 'ar' ? p.nameAr : p.name)) + ' · ' +
+        (b.repeat ? (lang === 'ar' ? 'حد ' + fmt(b.cap) + ' درهم' : 'cap ' + fmt(b.cap) + ' MAD') :
+                    (lang === 'ar' ? 'غير مُفعَّل' : 'off')) + '</span></span>' +
+        '<button class="sw" role="switch" aria-checked="' + (b.repeat ? 'true' : 'false') +
+        '" data-rep="' + b.id + '" aria-label="Auto-pay ' + esc(b.biller) + '"></button></div>';
+    }).join('');
+  }
+
+  function labels() {
+    var t = T[lang];
+    ['duenow','family','needsoon','sent30','feespaid','history','tab1','tab2','tab3','tab4',
+     'rate','mid','spread','fee2','repeatblurb','honest','support'].forEach(function (k) {
+      var el = $('t-' + k);
+      if (el) { el.textContent = t[k]; el.classList.toggle('ar', lang === 'ar'); }
+    });
+  }
+
+  var TITLES = { home: 'Dari', activity: 'Activity', repeats: 'Repeats', you: 'You' };
+  var TITLES_AR = { home: 'داري', activity: 'الحركات', repeats: 'تلقائي', you: 'حسابي' };
+
+  function show(name, personId) {
+    ['home','person','activity','repeats','you'].forEach(function (n) {
+      $('s-' + n).hidden = (n !== name);
+    });
+    var onPerson = name === 'person';
+    $('btn-back').hidden = !onPerson;
+    $('btn-add').hidden = onPerson;
+    var title;
+    if (onPerson) {
+      var p = personOf(personId);
+      title = lang === 'ar' ? p.nameAr : p.name;
+    } else {
+      title = (lang === 'ar' ? TITLES_AR : TITLES)[name];
+    }
+    $('appbar-title').textContent = title;
+    $('appbar-title').classList.toggle('ar', lang === 'ar' && onPerson);
+
+    Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
+      var go = t.getAttribute('data-go');
+      t.setAttribute('aria-selected', String(go === name || (onPerson && go === 'home')));
+    });
+
+    if (name === 'home') renderHome();
+    if (name === 'person') renderPerson(personId);
+    if (name === 'activity') renderActivity();
+    if (name === 'repeats') renderRepeats();
+    current = onPerson ? 'person' : name;
+    if (onPerson) openPerson = personId;
+    $('s-' + name).scrollTop = 0;
+  }
+
+  function toast(msg) {
+    var el = $('toast');
+    el.textContent = msg;
+    el.hidden = false;
+    clearTimeout(el._t);
+    el._t = setTimeout(function () { el.hidden = true; }, 2400);
+  }
+
+  function closeSheet() { $('scrim').hidden = true; }
+
+  function payScreen(b) {
+    var p = personOf(b.who);
+    var isTop = b.status === 'topup';
+    $('sheet-body').innerHTML =
+      '<h3 id="sheet-title">' + esc(b.biller) + '</h3>' +
+      '<p class="sub">' + esc((lang === 'ar' ? p.nameAr : p.name) + ' · ' + (lang === 'ar' ? b.kindAr : b.kind)) + '</p>' +
+      '<div class="bigamt"><div class="ba-mad">' + fmt(b.mad) + ' MAD</div>' +
+      '<div class="ba-eur">' + (lang === 'ar' ? 'تؤدي ' : 'you pay ') + eur(b.mad) + '</div></div>' +
+      '<div class="panel"><dl style="margin:0">' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'المرجع' : 'Reference') + '</dt><dd class="mono">' + esc(b.ref) + '</dd></div>' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'السعر' : 'Rate') + '</dt><dd>1 € = ' + RATE + ' MAD</dd></div>' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'الرسوم' : 'Fee') + '</dt><dd style="color:var(--paid)">' + (lang === 'ar' ? 'مجاناً' : 'Free') + '</dd></div>' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'الطريق' : 'Route') + '</dt><dd>' + (b.net ? 'Fatourati' : (lang === 'ar' ? 'سحب نقدي' : 'Cash pickup')) + '</dd></div>' +
+      '</dl></div>' +
+      (b.net ? '' : '<p class="sub">' + (lang === 'ar'
+          ? 'هذا المستفيد ليس على الشبكة. نرسل نقداً ليُسحب من وكالة قريبة.'
+          : 'This one is not on the bill network. We send cash for collection at a nearby agent instead.') + '</p>') +
+      '<button class="btn" data-confirm="' + b.id + '">' +
+      (isTop ? (lang === 'ar' ? 'عبِّئ الآن' : 'Top up now') : (lang === 'ar' ? 'أدِّ الآن' : 'Pay now')) + '</button>' +
+      '<button class="btn ghost" data-close="1">' + (lang === 'ar' ? 'إلغاء' : 'Cancel') + '</button>';
+    $('scrim').hidden = false;
+  }
+
+  function doneScreen(b) {
+    var p = personOf(b.who);
+    var ref = 'DARI-' + Math.floor(100000 + Math.random() * 899999);
+    $('sheet-body').innerHTML =
+      '<div class="tick" aria-hidden="true">✓</div>' +
+      '<h3 id="sheet-title" style="text-align:center">' +
+      (lang === 'ar' ? 'تمَّ الأداء' : 'Paid') + '</h3>' +
+      '<p class="sub" style="text-align:center">' +
+      esc(b.biller) + ' · ' + fmt(b.mad) + ' MAD · ' + eur(b.mad) + '</p>' +
+      '<div class="panel"><dl style="margin:0">' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'رقم العملية' : 'Receipt') + '</dt><dd class="mono">' + ref + '</dd></div>' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'المستفيد' : 'For') + '</dt><dd>' + esc(lang === 'ar' ? p.nameAr : p.name) + '</dd></div>' +
+      '<div class="kv"><dt>' + (lang === 'ar' ? 'الحالة' : 'Status') + '</dt><dd style="color:var(--paid)">' +
+      (b.net ? (lang === 'ar' ? 'مؤكَّد من المورِّد' : 'Confirmed by biller') : (lang === 'ar' ? 'جاهز للسحب' : 'Ready to collect')) + '</dd></div>' +
+      '</dl></div>' +
+      '<button class="btn" data-share="' + b.id + '">' +
+      (lang === 'ar' ? 'أرسل الإثبات للعائلة' : 'Send the receipt to family') + '</button>' +
+      '<button class="btn ghost" data-close="1">' + (lang === 'ar' ? 'تمَّ' : 'Done') + '</button>';
+    $('scrim').hidden = false;
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-person],[data-pay],[data-confirm],[data-close],[data-share],[data-rep],[data-payall],[data-cash]');
+    if (!t) return;
+
+    if (t.hasAttribute('data-person')) return show('person', t.getAttribute('data-person'));
+
+    if (t.hasAttribute('data-pay')) {
+      var b = billOf(t.getAttribute('data-pay'));
+      if (b.status === 'paid') { toast(lang === 'ar' ? 'مدفوعة سابقاً.' : 'Already paid.'); return; }
+      return payScreen(b);
+    }
+
+    if (t.hasAttribute('data-confirm')) {
+      var bb = billOf(t.getAttribute('data-confirm'));
+      if (bb.status !== 'topup') bb.status = 'paid';
+      history.unshift({ what: bb.biller + ', today', mad: bb.mad, when: 'Just now', who: personOf(bb.who).name });
+      return doneScreen(bb);
+    }
+
+    if (t.hasAttribute('data-share')) {
+      closeSheet();
+      show(current === 'person' ? 'person' : 'home', openPerson);
+      return toast(lang === 'ar' ? 'أُرسل الإثبات على واتساب.' : 'Receipt sent on WhatsApp.');
+    }
+
+    if (t.hasAttribute('data-close')) {
+      closeSheet();
+      return show(current === 'person' ? 'person' : current, openPerson);
+    }
+
+    if (t.hasAttribute('data-payall')) {
+      var id = t.getAttribute('data-payall');
+      var open = billsFor(id).filter(function (x) { return x.status === 'due'; });
+      if (!open.length) return toast(lang === 'ar' ? 'لا شيء واجب.' : 'Nothing due.');
+      var sum = open.reduce(function (a, x) { return a + x.mad; }, 0);
+      open.forEach(function (x) {
+        x.status = 'paid';
+        history.unshift({ what: x.biller + ', today', mad: x.mad, when: 'Just now', who: personOf(id).name });
+      });
+      show('person', id);
+      return toast((lang === 'ar' ? 'أُدِّيت ' + open.length + ' فواتير · ' : open.length + ' bills paid · ') + eur(sum));
+    }
+
+    if (t.hasAttribute('data-cash')) {
+      return toast(lang === 'ar' ? 'سحب نقدي: Wafacash و Cash Plus و Barid Cash.' : 'Cash pickup: Wafacash, Cash Plus, Barid Cash.');
+    }
+
+    if (t.hasAttribute('data-rep')) {
+      var rb = billOf(t.getAttribute('data-rep'));
+      rb.repeat = !rb.repeat;
+      renderRepeats();
+      return toast(rb.biller + ' · ' + (rb.repeat
+        ? (lang === 'ar' ? 'أداء تلقائي مُفعَّل' : 'auto-pay on')
+        : (lang === 'ar' ? 'أداء تلقائي موقوف' : 'auto-pay off')));
+    }
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (tab) {
+    tab.addEventListener('click', function () { show(tab.getAttribute('data-go')); });
+  });
+  $('btn-back').addEventListener('click', function () { show('home'); });
+  $('btn-add').addEventListener('click', function () {
+    toast(lang === 'ar' ? 'أضف قريباً برقم هاتفه.' : 'Add someone by their phone number.');
+  });
+  $('scrim').addEventListener('click', function (e) {
+    if (e.target === $('scrim')) { closeSheet(); show(current === 'person' ? 'person' : current, openPerson); }
+  });
+
+  function setOS(os) {
+    $('phone').setAttribute('data-os', os);
+    $('os-ios').setAttribute('aria-pressed', String(os === 'ios'));
+    $('os-android').setAttribute('aria-pressed', String(os === 'android'));
+    $('sb-time').textContent = os === 'ios' ? '9:41' : '09:41';
+  }
+  $('os-ios').addEventListener('click', function () { setOS('ios'); });
+  $('os-android').addEventListener('click', function () { setOS('android'); });
+
+  function setLang(l) {
+    lang = l;
+    $('lang-fr').setAttribute('aria-pressed', String(l === 'fr'));
+    $('lang-ar').setAttribute('aria-pressed', String(l === 'ar'));
+    labels();
+    show(current === 'person' ? 'person' : current, openPerson);
+  }
+  $('lang-fr').addEventListener('click', function () { setLang('fr'); });
+  $('lang-ar').addEventListener('click', function () { setLang('ar'); });
+
+  labels();
+  show('home');
+})();
+</script>
